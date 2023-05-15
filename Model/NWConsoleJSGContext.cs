@@ -287,5 +287,40 @@ namespace Northwind_Console_Net06.Model
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public void AddProduct(Product product)
+        {
+            this.Products.Add(product);
+            this.SaveChanges();
+        }
+
+        public void EditProduct(Product updatedProduct)
+        {
+            Product product = this.Products.Find(updatedProduct.ProductId);
+            product.ProductName = updatedProduct.ProductName;
+            product.Discontinued = updatedProduct.Discontinued;
+            product.SupplierId = updatedProduct.SupplierId;
+            product.CategoryId = updatedProduct.CategoryId;
+            product.QuantityPerUnit = updatedProduct.QuantityPerUnit;
+            product.UnitPrice = updatedProduct.UnitPrice;
+            product.UnitsInStock = updatedProduct.UnitsInStock;
+            product.UnitsOnOrder = updatedProduct.UnitsOnOrder;
+            product.ReorderLevel = updatedProduct.ReorderLevel;
+            this.SaveChanges();
+        }
+
+        public void AddCategory(Category category)
+        {
+            this.Categories.Add(category);
+            this.SaveChanges();
+        }
+
+        public void EditCategory(Category updatedCategory)
+        {
+            Category category = this.Categories.Find(updatedCategory.CategoryId);
+            category.CategoryName = updatedCategory.CategoryName;
+            category.Description = updatedCategory.Description;
+            this.SaveChanges();
+        }
     }
 }
