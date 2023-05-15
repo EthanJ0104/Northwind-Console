@@ -132,7 +132,6 @@ try
                     var discontinuedQuery = db.Products.OrderBy(p => p.ProductName).Where(p => p.Discontinued);
                     Console.WriteLine($"Number of Discontinued Products: {discontinuedQuery.Count()}");
 
-                    Console.ForegroundColor = ConsoleColor.Red;
                     if (discontinuedQuery.Count() != 0)
                     {
                         foreach (var product in discontinuedQuery)
@@ -140,7 +139,6 @@ try
                             Console.WriteLine(product.ProductName);
                         }
                         Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.White;
                     }
                     else
                     {
@@ -199,7 +197,35 @@ try
 
         else if (option == "2")
         {
+            Console.WriteLine("1) Add category");
+            Console.WriteLine("2) Display all categories");
+            choice = Console.ReadLine();
+            Console.Clear();
+            logger.Info($"Option {choice} selected");
 
+            if (choice == "1")
+            {
+                Category category = new Category();
+
+                Console.Write("Category name: ");
+                category.CategoryName = Console.ReadLine();
+                Console.Write("Description: ");
+                category.Description = Console.ReadLine();
+
+                db.AddCategory(category);
+                logger.Info("Category added: {name}", category.CategoryName);
+            }
+
+            if (choice == "2")
+            {
+                var query = db.Categories.OrderBy(p => p.CategoryName);
+
+                Console.WriteLine($"{query.Count()} records returned");
+                foreach (var item in query)
+                {
+                    Console.WriteLine($"{item.CategoryName} - {item.Description}");
+                }
+            }
         }
 
     } while (option.ToLower() != "q");
@@ -224,24 +250,6 @@ static Product GetProduct(NWConsoleJSGContext db)
         if (product != null)
         {
             return product;
-        }
-    }
-    return null;
-}
-
-static Category GetCategory(NWConsoleJSGContext db)
-{
-    var categories = db.Categories.OrderBy(c => c.CategoryId);
-    foreach (Category c in categories)
-    {
-        Console.WriteLine($"{c.CategoryId}: {c.CategoryName}");
-    }
-    if (int.TryParse(Console.ReadLine(), out int CategoryId))
-    {
-        Category category = db.Categories.FirstOrDefault(c => c.CategoryId == CategoryId);
-        if (category != null)
-        {
-            return category;
         }
     }
     return null;
